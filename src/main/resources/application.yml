@@ -1,0 +1,29 @@
+server:
+  port: 8099
+  servlet:
+    context-path: /data
+spring:
+  datasource:
+    druid:
+      # 注意（名称不支持大写和下划线可用中横线 比如 错误 的命名（slave_**, slaveTwo）)
+      master: #主库（数据源-1）
+        type: com.alibaba.druid.pool.xa.DruidXADataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/chapter05-1?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+      slave: #从库（数据源-2）
+        open: true
+        type: com.alibaba.druid.pool.xa.DruidXADataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/chapter05-2?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+    #jta相关参数配置
+  jta:
+    log-dir: classpath:tx-logs
+    transaction-manager-id: txManager
+#mybatis的配置在会话工厂里面配置，在这里配置会报错
+#mybatis:
+#  type-aliases-package: com.sccl.data_source_change.*.domain #包别名
+#  mapper-locations: classpath*:mybatis/**/*.xml #扫描mapper映射文件
